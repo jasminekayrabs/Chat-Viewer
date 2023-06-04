@@ -27,6 +27,9 @@ public class ChatController implements Initializable {
     private Image smileyImage;
     private Image sadImage;
     private File lastOpenDir;
+    public ChatController() {
+        //Default constructor
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -109,16 +112,19 @@ public class ChatController implements Initializable {
     }
 
     private void formatNickname(String nickname, String previousNickname) {
-        Text nicknameText = new Text(nickname + ": ");
+    if (previousNickname != null && nickname.equals(previousNickname)) {
+        Text nicknameText = new Text("...");
         nicknameText.setFont(Font.font("System", 12));
-        if (previousNickname != null && nickname.equals(previousNickname)) {
-            nicknameText.setText("...: ");
-        } else {
-            nicknameText.setFill(Color.BLUE);
-        }
-
+        nicknameText.setFill(Color.BLUE);
+        textFlow.getChildren().add(nicknameText);
+    } else {
+        Text nicknameText = new Text("[" + nickname + "]: ");
+        nicknameText.setFont(Font.font("System", 12));
+        nicknameText.setFill(Color.BLUE);
         textFlow.getChildren().add(nicknameText);
     }
+}
+
 
     private void formatContent(String content) {
         TextFlow contentTextFlow = new TextFlow();

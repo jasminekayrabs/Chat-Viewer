@@ -24,13 +24,18 @@ public class ChatController implements Initializable {
     private TextFlow textFlow;
     @FXML
     private Label errorLabel;
-    
+    private Image smileyImage;
+    private Image sadImage;
     private File lastOpenDir;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lastOpenDir = null;
         errorLabel.setText(""); // Initialize error label with empty text
+        
+        // Load smiley images
+        smileyImage = new Image(getClass().getResourceAsStream("pictures/smile_happy.gif"));
+        sadImage = new Image(getClass().getResourceAsStream("pictures/smile_sad.gif"));
     }
 
     @FXML
@@ -116,13 +121,29 @@ public class ChatController implements Initializable {
     }
 
     private void formatContent(String content) {
-        Text contentText = new Text(content);
-        contentText.setFont(Font.font("System", FontWeight.BOLD, 12));
-        contentText.setFill(Color.BLACK);
-        // contentText.setStyle("-fx-font-weight: bold;");
+        TextFlow contentTextFlow = new TextFlow();
 
-        textFlow.getChildren().add(contentText);
-        textFlow.getChildren().add(new Text("\n")); // Add line break
+        String[] words = content.split(" ");
+        for (String word : words) {
+            if (word.equals(":)")){ //Convert smiley to image
+                ImageView smileyImageView = new ImageView(smileyImage);
+                smileyImageView.setFitWidth(16);
+                smileyImageView.setFitHeight(16);
+                contentTextFlow.getChildren().add(smileyImageView);
+            } else if (word.equals(":(")){ //Convert smiley to image
+                ImageView sadImageView = new ImageView(sadImage);
+                sadImageView.setFitWidth(16);
+                sadImageView.setFitHeight(16);
+                contentTextFlow.getChildren().add(sadImageView);
+            } else {
+                Text wordText = new Text(word + " ");
+                wordText.setFont(Font.font("System", FontWeight.BOLD, 12));
+                wordText.setFill(Color.BLACK);
+                contentTextFlow.getChildren().add(wordText);
+            }
+        }
+        textFlow.getChildren().add(contentTextFlow);
+        textFlow.getChildren().add(new Text("\n")); //Add line break
     }
 
     private void showError(String message) {

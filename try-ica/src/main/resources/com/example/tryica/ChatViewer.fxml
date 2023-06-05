@@ -1,31 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
 <VBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tryica.ChatController">
-    <ScrollPane prefHeight="100.0" prefWidth="100.0">
+    <BorderPane>
+        <bottom>
+            <Button onAction="#handleOpenFile" text="Open File" textFill="#2150a8">
+            <BorderPane.margin>
+               <Insets left="200.0" />
+            </BorderPane.margin>
+            <font>
+               <Font size="15.0" />
+            </font>
+         </Button>
+        </bottom>
+    </BorderPane>
+    <ScrollPane VBox.vgrow="ALWAYS">
         <content>
             <!-- TextFlow to display the chat conversation -->
             <TextFlow fx:id="textFlow" lineSpacing="1.0" prefWidth="500" textAlignment="JUSTIFY" />
         </content>
     </ScrollPane>
-    <!-- Button to open the file chooser dialog -->
-    <Button alignment="CENTER" onAction="#openFile" text="Open File" textFill="#314199">
-        <font>
-            <Font name="Avenir Book" size="13.0" />
-        </font>
-        <!-- Applying margin to VBOX-->
-        <VBox.margin>
-            <Insets />
-        </VBox.margin>
-    </Button>
+
+    <!-- Label to display the file path and name -->
+    <Label fx:id="fileLabel" alignment="CENTER" textFill="#606dd3" />
 
     <!--  Error Label -->
-    <Label fx:id="errorLabel" alignment="CENTER" textFill="RED" />
-    <!-- Label to display the file path and name -->
-    <Label fx:id="fileLabel" alignment="CENTER" />
+    <Label fx:id="errorLabel" alignment="CENTER" textFill="RED" visible="false" />
+   <effect>
+      <ColorAdjust />
+   </effect>
 </VBox>

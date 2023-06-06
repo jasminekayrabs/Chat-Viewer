@@ -37,11 +37,19 @@ public class ChatController implements Initializable {
     @FXML
     private void handleOpenFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
+
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            processFile(file);
-            fileLabel.setText("File: " + file.getAbsolutePath());
+            String fileName = file.getName();
+            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+            if (fileExtension.equals("msg") || fileExtension.equals("txt")) {
+                processFile(file);
+                fileLabel.setText("File: " + file.getAbsolutePath());
+            } else {
+                showError("Invalid file format. Only .msg and .txt files are supported.");
+            }
         }
     }
     private Image smileyImage;
@@ -83,7 +91,7 @@ public class ChatController implements Initializable {
                 // Validate and extract nickname
                 String nicknameLine = reader.readLine();
                 if (nicknameLine == null || !nicknameLine.startsWith("Name:")) {
-                    showError("Invalid file format at line " + lineCounter);
+                    showError("Invalid nickname format at line " + lineCounter);
                     return; // Stop processing the file
                 }
                 String nickname = nicknameLine.substring(5);

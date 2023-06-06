@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!-- Importing necessary JavaFX classes -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
@@ -13,18 +16,28 @@
 <VBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tryica.ChatController">
     <!-- BorderPane to hold the button at the bottom -->
     <BorderPane>
-        <!-- Button for opening a file -->
         <bottom>
-            <Button onAction="#handleOpenFile" text="Open File" textFill="#2150a8">
-                <!-- Margin for the button -->
-                <BorderPane.margin>
-                    <Insets left="200.0" />
-                </BorderPane.margin>
-                <!-- Font for the button -->
-                <font>
-                    <Font size="15.0" />
-                </font>
-            </Button>
+            <HBox>
+                <Button onAction="#handleOpenFile" text="Open File" textFill="#2150a8">
+                    <!-- Font for the button -->
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+               <HBox.margin>
+                  <Insets left="160.0" />
+               </HBox.margin>
+                </Button>
+                <!-- Button for clearing the chat conversation -->
+                <Button fx:id="clearButton" onAction="#handleClear" text="Clear Chat" textFill="#2150a8" visible="false">
+                    <!-- Font for the button -->
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+                </Button>
+            </HBox>
         </bottom>
     </BorderPane>
 

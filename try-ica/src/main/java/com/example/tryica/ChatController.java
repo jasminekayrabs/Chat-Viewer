@@ -25,14 +25,34 @@ import javafx.scene.image.ImageView;
 
 public class ChatController implements Initializable {
     @FXML
+    private Button clearButton;
+    @FXML
     private Label fileLabel;
     @FXML
     private TextFlow textFlow;
     @FXML
     private Label errorLabel;
+    private Image smileyImage;
+    private Image sadImage;
+    public ChatController() {
+        //Default constructor
+    }
+
+    //The handleClear method is an event handler for the "Clear" button.
+    // It clears the content of the textflow when triggered.
+    // It sets the text of the fileLabel and errorLabel components to empty strings, clearing any previously displayed file information or error messages.
+    //It sets the visibility of the clearButton to false, hiding the button from the user interface.
+    @FXML
+    private void handleClear(ActionEvent event){
+        textFlow.getChildren().clear();
+        fileLabel.setText("");
+        errorLabel.setText("");
+        clearButton.setVisible(false); //Hide clear button
+    }
 
 //    The handleOpenFile method is called when the user clicks the "Open File" button.
 //    It opens a file chooser dialog, allows the user to select a file,
+//    If the user selects a file other than .msg or .txt file, it shows an error
 //    and calls the processFile method to handle the selected file.
     @FXML
     private void handleOpenFile(ActionEvent event) {
@@ -40,21 +60,32 @@ public class ChatController implements Initializable {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            processFile(file);
-            fileLabel.setText("File: " + file.getAbsolutePath());
+            String fileName = file.getName();
+            String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+            if (fileExtension.equals("msg") || fileExtension.equals("txt")) {
+                processFile(file);
+                fileLabel.setText("File: " + file.getAbsolutePath());
+                clearButton.setVisible(true); //Display the clear button
+            } else {
+                showError("Invalid file format. Only .msg and .txt files are supported.");
+            }
         }
-    }
-    private Image smileyImage;
-    private Image sadImage;
-    public ChatController() {
-        //Default constructor
     }
 
 //    This method is called when the FXML file is loaded and initializes the controller.
 //    It sets the initial state of the UI components, sets the error label to an empty text, and loads the smiley images.
+//    It also prints a welcome message when the user opens the app
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         errorLabel.setText(""); // Initialize error label with empty text
+
+        //Print Welcome message
+        Text welcomeText = new Text("Welcome to the Chat viewer app designed by Jasmine.\nPlease open a .msg or .txt file to view.");
+        welcomeText.setFont(Font.font("System", FontWeight.BOLD, 16));
+        welcomeText.setFill(Color.DARKBLUE);
+        textFlow.getChildren().add(welcomeText);
+
         // Load smiley images
         smileyImage = new Image(getClass().getResourceAsStream("pictures/smile_happy.gif"));
         sadImage = new Image(getClass().getResourceAsStream("pictures/smile_sad.gif"));
@@ -83,7 +114,7 @@ public class ChatController implements Initializable {
                 // Validate and extract nickname
                 String nicknameLine = reader.readLine();
                 if (nicknameLine == null || !nicknameLine.startsWith("Name:")) {
-                    showError("Invalid file format at line " + lineCounter);
+                    showError("Invalid syntax. Nickname is wrong at format at line " + lineCounter);
                     return; // Stop processing the file
                 }
                 String nickname = nicknameLine.substring(5);
@@ -91,7 +122,7 @@ public class ChatController implements Initializable {
                 // Validate and extract content
                 String contentLine = reader.readLine();
                 if (!contentLine.startsWith("Message:")) {
-                    showError("Invalid content format at line " + lineCounter);
+                    showError("Invalid syntax. Message format is wrong at line " + lineCounter);
                     return; // Stop processing the file
                 }
                 String content = contentLine.substring(8);
